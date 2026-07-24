@@ -16,14 +16,19 @@ public class BaseTest {
 
     @BeforeClass
     public void setup() throws IOException {
-        Properties props = new Properties();
-        try (InputStream is = getClass().getClassLoader()
-                .getResourceAsStream("config.properties")){
-            props.load(is);
+        String baseUrl = System.getenv("BASE_URL");
+
+        if (baseUrl == null || baseUrl.isBlank()) {
+            Properties props = new Properties();
+            try (InputStream is = getClass().getClassLoader()
+                    .getResourceAsStream("config.properties")) {
+                props.load(is);
+            }
+            baseUrl = props.getProperty("base.uri");
         }
 
         requestSpec = new RequestSpecBuilder()
-                .setBaseUri(props.getProperty("base.uri"))
+                .setBaseUri(baseUrl)
                 .setContentType(ContentType.JSON)
                 .build();
 

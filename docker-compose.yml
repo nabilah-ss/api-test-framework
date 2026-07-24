@@ -1,0 +1,14 @@
+services:
+  wiremock:
+    image: wiremock/wiremock:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings
+
+  api-tests:
+    build: .
+    depends_on:
+      - wiremock
+    environment:
+      - BASE_URL=http://wiremock:8080
