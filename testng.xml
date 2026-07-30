@@ -3,6 +3,7 @@
     <test name="Smoke">
         <classes>
             <class name="io.github.nabilahss.tests.HealthCheckTest"/>
+            <class name="io.github.nabilahss.tests.BookingTest"/>
         </classes>
     </test>
 </suite>
