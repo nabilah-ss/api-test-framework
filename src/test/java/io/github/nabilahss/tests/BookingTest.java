@@ -9,12 +9,13 @@ import static org.hamcrest.Matchers.*;
 public class BookingTest extends BaseTest {
 
     @Test
-    public void getBookingByIdReturnsExpectedFields() {
+    public void getBookingByIdReturnsEchoedBookingId() {
         given()
                 .when()
-                .get("/booking/1")
+                .get("/booking/99")
                 .then()
                 .statusCode(200)
+                .body("bookingid", equalTo("99"))
                 .body("firstname", equalTo("Sally"))
                 .body("lastname", equalTo("Brown"))
                 .body("totalprice", equalTo(111))
@@ -31,5 +32,6 @@ public class BookingTest extends BaseTest {
                 .body("bookingdates.checkin", equalTo("2013-02-23"))
                 .body("bookingdates.checkout", equalTo("2014-10-23"))
                 .body("additionalneeds", equalTo("Breakfast"));
+        verifyRequest("GET", "/booking/2");
     }
 }

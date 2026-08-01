@@ -5,6 +5,7 @@ services:
       - "8080:8080"
     volumes:
       - ./wiremock/mappings:/home/wiremock/mappings
+    command: --global-response-templating
 
   api-tests:
     build: .
@@ -12,3 +13,4 @@ services:
       - wiremock
     environment:
       - BASE_URL=http://wiremock:8080
+      - WIREMOCK_ADMIN=http://wiremock:8080

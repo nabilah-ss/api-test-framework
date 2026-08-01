@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.greaterThan;
+
 public class BaseTest {
 
     protected static RequestSpecification requestSpec;
@@ -33,5 +36,27 @@ public class BaseTest {
                 .build();
 
         RestAssured.requestSpecification = requestSpec;
+    }
+
+    protected void verifyRequest(String method, String urlPattern) {
+        String wiremockAdmin = System.getenv("WIREMOCK_ADMIN");
+        if (wiremockAdmin == null || wiremockAdmin.isBlank()) {
+            wiremockAdmin = "http://localhost:8080"; // local fallback
+        }
+
+        String verifyUrl = wiremockAdmin + "/__admin/requests/find";
+        String requestJson = String.format(
+                "{\"method\":\"%s\",\"urlPattern\":\"%s\"}",
+                method, urlPattern
+        );
+
+        given()
+                .body(requestJson)
+                .contentType(ContentType.JSON)
+                .when()
+                .post(verifyUrl)
+                .then()
+                .statusCode(200)
+                .body("size()", greaterThan(0));
     }
 }
