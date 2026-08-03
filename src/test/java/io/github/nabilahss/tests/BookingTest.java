@@ -1,19 +1,20 @@
 package io.github.nabilahss.tests;
 
+import io.github.nabilahss.client.BookingClient;
 import io.github.nabilahss.config.BaseTest;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class BookingTest extends BaseTest {
 
+    private final BookingClient bookingClient = new BookingClient();
+
     @Test
     public void getBookingByIdReturnsEchoedBookingId() {
-        given()
-                .when()
-                .get("/booking/99")
-                .then()
+        Response response = bookingClient.getBooking(99);
+        response.then()
                 .statusCode(200)
                 .body("bookingid", equalTo("99"))
                 .body("firstname", equalTo("Sally"))
@@ -24,10 +25,8 @@ public class BookingTest extends BaseTest {
 
     @Test
     public void getBookingByIdReturnsBookingDates() {
-        given()
-                .when()
-                .get("/booking/42")
-                .then()
+        Response response = bookingClient.getBooking(42);
+        response.then()
                 .statusCode(200)
                 .body("bookingdates.checkin", equalTo("2013-02-23"))
                 .body("bookingdates.checkout", equalTo("2014-10-23"))
