@@ -28,9 +28,16 @@ jobs:
       - name: Run API tests
         run: docker compose run --rm api-tests
 
+      - name: Copy test reports to runner
+        if: always()
+        run: |
+            cp -r target/surefire-reports ./target-surefire-reports || true
+            ls -la
+
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: target/surefire-reports/
+          if-no-files-found: ignore

@@ -14,3 +14,5 @@ services:
     environment:
       - BASE_URL=http://wiremock:8080
       - WIREMOCK_ADMIN=http://wiremock:8080
+    volumes:
+      - ./target/surefire-reports:/app/target/surefire-reports
